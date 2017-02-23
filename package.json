@@ -1,0 +1,13 @@
+{
+  "name": "pizza.code-geek.ru",
+  "version": "0.0.1",
+  "description": "",
+  "main": "app.js",
+  "author": "JimmDiGriz",
+  "dependencies": {
+    "q": "1.0.1",
+    "cluster": "*",
+    "telegram-node-bot": "*",
+    "lodash": "*"
+  }
+}
