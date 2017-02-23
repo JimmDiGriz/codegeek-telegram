@@ -6,8 +6,13 @@
 
 let _ = require('lodash');
 let constants = require('../values/constants');
+let Order = require('../models/order');
+let redis = require('../storage');
 
 class OrderPizzaForm {
+    /**
+     * @param {Scope} $
+     **/
     start($) {
         let form = {
             name: {
@@ -38,7 +43,7 @@ class OrderPizzaForm {
                 q: 'Введите цену пиццы',
                 error: constants.errors.something_wrong,
                 validator: (message, callback) => {
-                    if(!_.isNil(message.text) && !_.isNumber(_.toNumber(message.text)) && _.toNumber(message.text) > 0) {
+                    if(!_.isNil(message.text) && _.isNumber(_.toNumber(message.text)) && _.toNumber(message.text) > 0) {
                         callback(true, _.toNumber(message.text));
                         return;
                     }
@@ -62,6 +67,7 @@ class OrderPizzaForm {
             comment: {
                 q: 'Введите дополнительную информацию',
                 error: constants.errors.something_wrong,
+                keyboard: null,
                 validator: (message, callback) => {
                     if(!_.isNil(message.text) && !_.toNumber(message.text)) {
                         callback(true, message.text);
@@ -74,7 +80,13 @@ class OrderPizzaForm {
         };
 
         $.runForm(form, (result) => {
+            result.username = $.message.from.username;
+
+            redis.set('currentOrder', JSON.stringify(result));
+
             console.log(result);
+
+            $.sendMessage('Заказ принят');
         })
     }
 }

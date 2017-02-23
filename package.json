@@ -8,6 +8,7 @@
     "q": "1.0.1",
     "cluster": "*",
     "telegram-node-bot": "*",
-    "lodash": "*"
+    "lodash": "*",
+    "redis": "*"
   }
 }

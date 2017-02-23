@@ -7,6 +7,7 @@
 let config = require('./config');
 
 let Telegram = require('telegram-node-bot');
+
 const TelegramBaseController = Telegram.TelegramBaseController;
 const TextCommand = Telegram.TextCommand;
 Telegram = new Telegram.Telegram(config.telegram_token,
@@ -20,12 +21,18 @@ Telegram = new Telegram.Telegram(config.telegram_token,
 let EchoController = require('./controllers/echo-controller');
 let PizzaController = require('./controllers/pizza-controller');
 
+//PizzaController = new PizzaController();
+
+let redis = require('./storage');
+redis.del('currentOrder');
+
 Telegram.router
 //    .when(
 //    new TextCommand('', 'echoCommand'),
 //    new EchoController()
 //)
-    .when(
-    new TextCommand('/pizza', 'menuCommand'),
+    .when([
+        new TextCommand('/pizza', 'menuCommand'),
+        new TextCommand('/current', 'currentCommand')],
     new PizzaController()
 );
